@@ -1,0 +1,7 @@
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\bin\Debug\KChain.exe.config
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\bin\Debug\KChain.exe
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\bin\Debug\KChain.pdb
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\obj\Debug\KChainExecuter.csprojAssemblyReference.cache
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\obj\Debug\KChainExecuter.csproj.CoreCompileInputs.cache
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\obj\Debug\KChain.exe
+C:\Users\soohyunjo\source\repos\KChain\KChainProjecter\obj\Debug\KChain.pdb

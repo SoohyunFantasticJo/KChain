@@ -1,0 +1,14 @@
+C:\Users\user\source\repos\KChain\KChain\obj\Debug\KChain.csprojAssemblyReference.cache
+C:\Users\user\source\repos\KChain\KChain\obj\Debug\KChain.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\KChain\KChain\bin\Debug\KChain.exe.config
+C:\Users\user\source\repos\KChain\KChain\bin\Debug\KChain.exe
+C:\Users\user\source\repos\KChain\KChain\bin\Debug\KChain.pdb
+C:\Users\user\source\repos\KChain\KChain\obj\Debug\KChain.exe
+C:\Users\user\source\repos\KChain\KChain\obj\Debug\KChain.pdb
+C:\Users\soohyunjo\source\repos\KChain\KChain\bin\Debug\KChain.exe.config
+C:\Users\soohyunjo\source\repos\KChain\KChain\bin\Debug\KChain.exe
+C:\Users\soohyunjo\source\repos\KChain\KChain\bin\Debug\KChain.pdb
+C:\Users\soohyunjo\source\repos\KChain\KChain\obj\Debug\KChain.csprojAssemblyReference.cache
+C:\Users\soohyunjo\source\repos\KChain\KChain\obj\Debug\KChain.csproj.CoreCompileInputs.cache
+C:\Users\soohyunjo\source\repos\KChain\KChain\obj\Debug\KChain.exe
+C:\Users\soohyunjo\source\repos\KChain\KChain\obj\Debug\KChain.pdb
