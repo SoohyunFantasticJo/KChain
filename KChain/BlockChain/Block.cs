@@ -12,7 +12,7 @@ namespace KChain.BlockChain
     public class Block
     {
         [Serializable]
-        public class BlockHeader
+        public class BlockHeader : ICloneable
         {
             private double _version;
             public double Version
@@ -58,17 +58,16 @@ namespace KChain.BlockChain
 
             public int ProofOfWorkCount()
             {
-                BlockHeader sampleHdr = (BlockHeader)this;
+                BlockHeader sampleHdr = (BlockHeader)((BlockHeader)this).Clone();// (BlockHeader)this;
                 sampleHdr.Nonce = 0;
 
                 using (SHA256Managed hashstring = new SHA256Managed())
                 {
-                    Console.WriteLine(((BlockHeader)this).GetBlockHash());
-                    Console.WriteLine(sampleHdr.GetBlockHash());
-
                     while (((BlockHeader)this).GetBlockHash() != sampleHdr.GetBlockHash())
                     {
                         sampleHdr.Nonce += 1;
+
+                        //Console.WriteLine("{0}: {1}", sampleHdr.Nonce, sampleHdr.GetBlockHash());
                     }
 
                     return sampleHdr.Nonce;
@@ -102,9 +101,23 @@ namespace KChain.BlockChain
             {
                 StringBuilder strBld = new StringBuilder();
                 foreach (byte bt in bts)
+                {
                     strBld.AppendFormat("{0:X2}", bt);
+                }
 
                 return strBld.ToString();
+            }
+            public object Clone()
+            {
+                BlockHeader source = (BlockHeader)this;
+                BlockHeader clone = new BlockHeader(source.PreBlockHash, new List<Transaction>());
+
+                clone.Version = source.Version;
+                clone.MerkelRootHash = source.MerkelRootHash;
+                clone.TimeStamp = source.TimeStamp;
+                clone.Difficulty = source.Difficulty;
+
+                return (Object)clone;
             }
 
             public BlockHeader(byte[] preBlockHash, List<Transaction> transactions)
@@ -113,7 +126,7 @@ namespace KChain.BlockChain
                 _merkleRootHash = transactions.GetHashCode();
 
                 Random rnd = new Random(DateTime.Now.Millisecond);
-                Nonce = 5;
+                _nonce = rnd.Next(0, 9999); // 추후에 0~난이도로 조정할 것
             }
         }
 
