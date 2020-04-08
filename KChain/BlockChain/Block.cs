@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KChain.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,12 @@ namespace KChain.BlockChain
 {
     public class Block
     {
+        private static int _maxNonce = 1000000;
+        public static int MaxNonce
+        {
+            get { return _maxNonce; }
+        }
+
         [Serializable]
         public class BlockHeader : ICloneable
         {
@@ -35,8 +42,8 @@ namespace KChain.BlockChain
                 set { _merkleRootHash = value; }
             }
 
-            private int _timeStamp;
-            public int TimeStamp
+            private DateTime _timeStamp;
+            public DateTime TimeStamp
             {
                 get { return _timeStamp; }
                 set { _timeStamp = value; }
@@ -76,37 +83,17 @@ namespace KChain.BlockChain
 
             public string GetBlockHash()
             {
-                byte[] bytes = ((BlockHeader)this).ObjectToByteArray();
+                byte[] bytes = Converters.ObjectToByteArray((BlockHeader)this);
 
                 SHA256Managed h = new SHA256Managed();
                 using (SHA256Managed hashstring = new SHA256Managed())
                 {
                     byte[] hash = hashstring.ComputeHash(bytes);
 
-                    return ByteArrayToString(hash);
+                    return Converters.ByteArrayToString(hash);
                 }
             }
 
-            public byte[] ObjectToByteArray()
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    bf.Serialize(ms, (object)this);
-                    return ms.ToArray();
-                }
-            }
-
-            public string ByteArrayToString(byte[] bts)
-            {
-                StringBuilder strBld = new StringBuilder();
-                foreach (byte bt in bts)
-                {
-                    strBld.AppendFormat("{0:X2}", bt);
-                }
-
-                return strBld.ToString();
-            }
             public object Clone()
             {
                 BlockHeader source = (BlockHeader)this;
@@ -124,9 +111,10 @@ namespace KChain.BlockChain
             {
                 _preBlockHash = preBlockHash;
                 _merkleRootHash = transactions.GetHashCode();
+                _timeStamp = DateTime.Now;
 
                 Random rnd = new Random(DateTime.Now.Millisecond);
-                _nonce = rnd.Next(0, 9999); // 추후에 0~난이도로 조정할 것
+                _nonce = rnd.Next(0, _maxNonce); // 추후에 0~난이도로 조정할 것
             }
         }
 
@@ -181,7 +169,7 @@ namespace KChain.BlockChain
         }
 
         private BlockHeader _header;
-        public BlockHeader Header
+        private BlockHeader Header
         {
             get
             {
@@ -198,7 +186,7 @@ namespace KChain.BlockChain
         }
 
         private BlockBody _body;
-        public BlockBody Body
+        private BlockBody Body
         {
             get
             {
@@ -216,23 +204,30 @@ namespace KChain.BlockChain
 
         public Block(byte[] preBlockHash, List<Transaction> transactions)
         {
-            Header = new BlockHeader(preBlockHash, transactions);
-            Body = new BlockBody(Header, transactions);
+            _header = new BlockHeader(preBlockHash, transactions);
+            _body = new BlockBody(_header, transactions);
         }
 
         public string GetBlockHash()
         {
-            return Header.GetBlockHash();
+            return _header.GetBlockHash();
         }
 
-        public BlockBody GetBlock()
+        public bool SetNonce(int nonce)
         {
-            return Body.GetBlock();
+            _header.Nonce = nonce;
+
+            return true;
+        }
+
+        public BlockBody GetBlockBody()
+        {
+            return _body.GetBlock();
         }
 
         public int ProofOfWorkCount()
         {
-            return Header.ProofOfWorkCount();
+            return _header.ProofOfWorkCount();
         }
     }
 }
