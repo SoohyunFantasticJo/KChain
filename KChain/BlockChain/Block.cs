@@ -12,10 +12,16 @@ namespace KChain.BlockChain
 {
     public class Block
     {
-        private static int _maxNonce = 1000000;
+        private static int _maxNonce = 10000000;
         public static int MaxNonce
         {
             get { return _maxNonce; }
+        }
+
+        private static int _defaultDifficulty = 5;
+        public static int DefaultDifficulty
+        {
+            get { return _defaultDifficulty; }
         }
 
         [Serializable]
@@ -49,8 +55,8 @@ namespace KChain.BlockChain
                 set { _timeStamp = value; }
             }
 
-            private uint _difficulty;
-            public uint Difficulty
+            private int _difficulty;
+            public int Difficulty
             {
                 get { return _difficulty; }
                 set { _difficulty = value; }
@@ -94,6 +100,13 @@ namespace KChain.BlockChain
                 }
             }
 
+            public static bool isValidNonce(string hash, int difficulty)
+            {
+                int emptyBitsLength = hash.Substring(0, difficulty).Replace("0", "").Length;
+
+                return emptyBitsLength <= 0 ? true : false;
+            }
+
             public object Clone()
             {
                 BlockHeader source = (BlockHeader)this;
@@ -107,14 +120,39 @@ namespace KChain.BlockChain
                 return (Object)clone;
             }
 
+            public int CalculateNonce(BlockHeader blockHeader)
+            {
+                int nonce = 0;
+                while(true)
+                {
+                    blockHeader.Nonce = nonce;
+
+                    if (BlockHeader.isValidNonce(blockHeader.GetBlockHash(), _difficulty))
+                    {
+                        break;
+                    }
+
+                    nonce++;
+
+                    if(nonce > _maxNonce)
+                    {
+                        break;
+                    }
+                }
+
+                return nonce;
+            }
+
             public BlockHeader(byte[] preBlockHash, List<Transaction> transactions)
             {
                 _preBlockHash = preBlockHash;
                 _merkleRootHash = transactions.GetHashCode();
                 _timeStamp = DateTime.Now;
+                _difficulty = _defaultDifficulty;
 
-                Random rnd = new Random(DateTime.Now.Millisecond);
-                _nonce = rnd.Next(0, _maxNonce); // 추후에 0~난이도로 조정할 것
+                _nonce = CalculateNonce(this);
+
+                Console.WriteLine(_nonce);
             }
         }
 

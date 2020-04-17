@@ -14,6 +14,49 @@ namespace KChain.Miners
         public static bool Run(Chain chain)
         {
             chain.Init();
+            Block prevBlock = chain.GetFirstBlock();
+
+            Block newBlock = new Block(chain.GetIndex() <= 0 ? null : Encoding.UTF8.GetBytes(prevBlock.GetBlockHash()), chain.GetCurrentBlock().GetBlockBody().Transactions);
+
+
+
+            //while (true)
+            //{
+            //prevBlock
+            //}
+
+            return true;
+        }
+
+        public static bool FindNonce(Block newBlock)
+        {
+            int nonce = 0;
+            string hashResult = string.Empty;
+
+            for(int difficultyBits = 0; difficultyBits < 32; difficultyBits++)
+            {
+                double difficulty = Math.Pow(2, difficultyBits);
+
+                Console.WriteLine("Difficulty: {0}({1} bits)", difficulty, difficultyBits);
+                Console.WriteLine("Starting search...");
+
+                DateTime start = DateTime.Now;
+
+                //Block newBlock = new Block(chain.GetIndex() <= 0 ? null : Encoding.UTF8.GetBytes(newBlock.GetBlockHash()), chain.GetCurrentBlock().GetBlockBody().Transactions);
+            }
+
+            return true;
+        }
+
+        public static int ProofOfWork(Block header, int difficultyBits)
+        {
+            return 0;
+        }
+
+        /*
+        public static bool Run(Chain chain)
+        {
+            chain.Init();
             Block newBlock = chain.GetFirstBlock();
 
             while (true)
@@ -43,8 +86,7 @@ namespace KChain.Miners
             return true;
         }
 
-        private static string FindNonce(Block orgBlock, Block newBlock, out int res)
-        {
+        private static string FindNonce(Block orgBlock, Block newBlock, out int res)        {
             byte[] orgHash = Converters.StringToByteArray(orgBlock.GetBlockHash());
             string hashResult = null;
             int nonce = 0;
@@ -66,5 +108,6 @@ namespace KChain.Miners
             res = nonce;
             return hashResult;
         }
+        */
     }
 }
